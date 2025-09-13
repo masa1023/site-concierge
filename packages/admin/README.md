@@ -5,6 +5,7 @@ A simple web-based interface to manage FlowAgent's content extraction and indexi
 ## 🚀 Quick Start
 
 ### 1. Install Dependencies
+
 ```bash
 npm install
 ```
@@ -12,6 +13,7 @@ npm install
 ### 2. Set Environment Variables
 
 #### Method 1: Using .env.local file (Recommended)
+
 ```bash
 # Copy the example file
 cp .env.local.example .env.local
@@ -24,6 +26,7 @@ ADMIN_PORT=3001
 ```
 
 #### Method 2: Using export commands
+
 ```bash
 export WEAVIATE_HOST="your-instance.weaviate.network"
 export WEAVIATE_API_KEY="your-weaviate-api-key"
@@ -31,27 +34,32 @@ export GOOGLE_API_KEY="your-google-api-key"
 ```
 
 ### 3. Start Admin Server
+
 ```bash
 npm run flowagent:admin
 ```
 
 ### 4. Open Admin Interface
+
 Visit [http://localhost:3001](http://localhost:3001) in your browser.
 
 ## ✨ Features
 
 ### 🔍 Website Content Extraction
+
 - Simple URL input field
 - One-click scraping with real-time status
 - Content length validation
 - Error handling with detailed logs
 
-### 🗄️ Data Indexing  
+### 🗄️ Data Indexing
+
 - Automatic chunking of scraped content
 - Weaviate integration with progress tracking
 - Success/failure status with detailed feedback
 
 ### 📊 Progress Tracking
+
 - Visual step indicator (Scrape → Index → Deploy)
 - Real-time status updates
 - Console logs for debugging
@@ -59,9 +67,11 @@ Visit [http://localhost:3001](http://localhost:3001) in your browser.
 ## 🛠️ API Endpoints
 
 ### `POST /api/scrape`
+
 Scrapes content from a provided URL.
 
 **Request Body:**
+
 ```json
 {
   "url": "https://your-website.com"
@@ -69,6 +79,7 @@ Scrapes content from a provided URL.
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -79,9 +90,11 @@ Scrapes content from a provided URL.
 ```
 
 ### `POST /api/index`
+
 Indexes the scraped content into Weaviate.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -92,9 +105,11 @@ Indexes the scraped content into Weaviate.
 ```
 
 ### `GET /api/status`
+
 Checks if scraped content exists.
 
 **Response:**
+
 ```json
 {
   "hasScrapedContent": true,
@@ -104,16 +119,18 @@ Checks if scraped content exists.
 ```
 
 ### `GET /api/health`
+
 Health check with environment variable status.
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
   "timestamp": "2024-01-15T10:30:00.000Z",
   "environment": {
     "WEAVIATE_HOST": "✓ Set",
-    "WEAVIATE_API_KEY": "✓ Set", 
+    "WEAVIATE_API_KEY": "✓ Set",
     "GOOGLE_API_KEY": "✓ Set"
   }
 }
@@ -122,14 +139,18 @@ Health check with environment variable status.
 ## 🔧 Configuration
 
 ### Port Configuration
+
 Default port is `3001`. Override with environment variable:
+
 ```bash
 export ADMIN_PORT=8080
 npm run flowagent:admin
 ```
 
 ### Script Paths
+
 The admin interface executes scripts relative to the project root:
+
 - `./scripts/scraper.js` - Content extraction
 - `./scripts/indexer.js` - Data indexing
 
@@ -153,15 +174,19 @@ admin/
 ## 🚨 Troubleshooting
 
 ### Environment Variables Not Set
+
 Check the health endpoint at `/api/health` to verify environment variable status.
 
 ### Script Execution Failures
+
 Check the browser console and server logs for detailed error messages.
 
 ### Port Already in Use
+
 Change the port using the `ADMIN_PORT` environment variable.
 
 ### CORS Issues
+
 The admin interface serves from the same origin as the API, so CORS should not be an issue.
 
 ## 🔒 Security Note
