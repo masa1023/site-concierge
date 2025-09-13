@@ -1,0 +1,12 @@
+# Environment variables
+.env.local
+.env.*.local
+
+# Content files
+scraped_content.txt
+
+# Logs
+*.log
+
+# OS files
+.DS_Store

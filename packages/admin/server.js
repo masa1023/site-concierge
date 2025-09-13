@@ -6,7 +6,7 @@ const weaviate = require('weaviate-client')
 
 // Load environment variables from .env.local
 require('dotenv').config({
-  path: path.join(__dirname, '..', '..', '.env.local'),
+  path: path.join(__dirname, '.env.local'),
 })
 
 const app = express()
@@ -76,7 +76,7 @@ async function scrapeWebsite(url) {
     console.log(`Extracted content length: ${content.length} characters`)
 
     // Save to file
-    const contentPath = path.join(__dirname, '..', '..', 'scraped_content.txt')
+    const contentPath = path.join(__dirname, 'scraped_content.txt')
     fs.writeFileSync(contentPath, content, 'utf8')
     console.log('Content saved to scraped_content.txt')
 
@@ -182,7 +182,7 @@ async function indexContent(collection) {
   // Read scraped content
   let content
   try {
-    const contentPath = path.join(__dirname, '..', '..', 'scraped_content.txt')
+    const contentPath = path.join(__dirname, 'scraped_content.txt')
     content = fs.readFileSync(contentPath, 'utf8')
     console.log(`Read content: ${content.length} characters`)
   } catch (error) {
@@ -306,7 +306,7 @@ app.post('/api/index', async (req, res) => {
 
 // API endpoint to check if scraped content exists
 app.get('/api/status', (req, res) => {
-  const contentPath = path.join(__dirname, '..', '..', 'scraped_content.txt')
+  const contentPath = path.join(__dirname, 'scraped_content.txt')
   const hasContent = fs.existsSync(contentPath)
 
   let contentLength = 0
