@@ -112,11 +112,7 @@ npm run dev:chat              # Start chat widget dev server
 
 # Building
 npm run build                 # Build chat widget only
-npm run build:chat           # Build chat widget explicitly
-
-# Package-specific commands
-npm run dev --workspace=admin        # Alternative syntax
-npm run build --workspace=chat-widget   # Alternative syntax
+npm run build:chat            # Build chat widget explicitly
 ```
 
 ## 🤖 Chat Widget (`packages/chat-widget`)
