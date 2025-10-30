@@ -11,7 +11,9 @@
     "dev:chat": "npm run dev --workspace=chat-widget",
     "dev:admin": "npm run dev --workspace=admin",
     "build:chat": "npm run build --workspace=chat-widget",
-    "build": "npm run build:chat"
+    "build:admin": "npm run build --workspace=admin",
+    "build": "npm run build:chat && npm run build:admin",
+    "start:admin": "npm run start --workspace=admin"
   },
   "dependencies": {},
   "devDependencies": {},

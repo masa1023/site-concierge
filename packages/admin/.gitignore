@@ -2,6 +2,18 @@
 .env.local
 .env.*.local
 
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
 # Content files
 scraped_content.txt
 
@@ -10,3 +22,4 @@ scraped_content.txt
 
 # OS files
 .DS_Store
+Thumbs.db
