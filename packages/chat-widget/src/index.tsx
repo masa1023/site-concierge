@@ -3,13 +3,6 @@ import { ChatWidget } from './components/ChatWidget'
 
 // Development mode: render to app div
 if (document.getElementById('app')) {
-  // 開発時は環境変数から設定
-  (window as any).CHAT_WIDGET_CONFIG = {
-    weaviateHost: import.meta.env.VITE_WEAVIATE_HOST,
-    weaviateApiKey: import.meta.env.VITE_WEAVIATE_API_KEY,
-    googleApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
-    weaviateScheme: 'https'
-  };
   render(<ChatWidget />, document.getElementById('app'))
 }
 

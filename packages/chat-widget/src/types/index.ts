@@ -6,6 +6,4 @@ export interface Message {
 export interface Config {
   weaviateHost?: string
   weaviateApiKey?: string
-  googleApiKey?: string
-  weaviateScheme: string
 }

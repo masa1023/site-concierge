@@ -93,9 +93,7 @@ GOOGLE_API_KEY=your-google-api-key
 **Chat Widget (`packages/chat-widget/.env.local`):**
 
 ```bash
-VITE_WEAVIATE_HOST=your-cluster.weaviate.network
-VITE_WEAVIATE_API_KEY=your-weaviate-api-key
-VITE_GOOGLE_API_KEY=your-google-api-key
+VITE_ADMIN_API_URL
 ```
 
 ## 🛠️ Development Commands
@@ -165,19 +163,6 @@ The widget reads configuration in this priority order:
 
 1. **Script tag data attributes** (recommended for production)
 2. **Environment variables** (development only)
-3. **Global `CHAT_WIDGET_CONFIG` object** (programmatic)
-
-#### Advanced Configuration
-
-```javascript
-// Programmatic configuration (optional)
-window.CHAT_WIDGET_CONFIG = {
-  weaviateHost: 'your-cluster.weaviate.network',
-  weaviateApiKey: 'your-api-key',
-  googleApiKey: 'your-google-key',
-  weaviateScheme: 'https', // default
-}
-```
 
 ### Widget Appearance
 
