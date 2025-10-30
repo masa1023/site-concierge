@@ -1,75 +1,49 @@
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || ''
+import Anthropic from '@anthropic-ai/sdk'
+
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || ''
 
 export interface GenerateResponseOptions {
   temperature?: number
-  maxOutputTokens?: number
+  maxTokens?: number
 }
 
 export async function generateResponse(
   prompt: string,
   options: GenerateResponseOptions = {}
 ): Promise<string> {
-  const {
-    temperature = 0.7,
-    maxOutputTokens = 1024,
-  } = options
+  const { temperature = 0.7, maxTokens = 1024 } = options
+
+  if (!ANTHROPIC_API_KEY) {
+    throw new Error('ANTHROPIC_API_KEY environment variable is not set')
+  }
 
   try {
-    const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-goog-api-key': GOOGLE_API_KEY,
+    const client = new Anthropic({
+      apiKey: ANTHROPIC_API_KEY,
+    })
+
+    const message = await client.messages.create({
+      model: 'claude-sonnet-4-5-20250929',
+      max_tokens: maxTokens,
+      temperature,
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
         },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: prompt,
-                },
-              ],
-            },
-          ],
-          generationConfig: {
-            temperature,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens,
-          },
-          safetySettings: [
-            {
-              category: 'HARM_CATEGORY_HARASSMENT',
-              threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-            },
-            {
-              category: 'HARM_CATEGORY_HATE_SPEECH',
-              threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-            },
-          ],
-        }),
-      }
+      ],
+    })
+
+    const textContent = message.content.find(
+      (block: any) => block.type === 'text'
     )
-
-    if (!response.ok) {
-      throw new Error(`Gemini API error: ${response.status}`)
-    }
-
-    const result = await response.json()
-
-    if (
-      result.candidates &&
-      result.candidates[0] &&
-      result.candidates[0].content
-    ) {
-      return result.candidates[0].content.parts[0].text
+    if (textContent && textContent.type === 'text') {
+      return textContent.text
     } else {
-      throw new Error('Invalid response from Gemini API')
+      throw new Error('Invalid response from Claude API')
     }
   } catch (error) {
-    console.error('Gemini API error:', error)
+    console.error('Claude API error:', error)
     throw error
   }
 }

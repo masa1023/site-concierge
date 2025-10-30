@@ -12,6 +12,7 @@
     "next": "^15.0.0",
     "react": "^19.0.0-rc.0",
     "react-dom": "^19.0.0-rc.0",
+    "@anthropic-ai/sdk": "^0.24.3",
     "dotenv": "^16.3.1",
     "playwright": "^1.40.0",
     "weaviate-client": "^3.8.1"

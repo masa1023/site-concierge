@@ -103,11 +103,15 @@ export async function indexContent(collection: any): Promise<number> {
   return chunks.length
 }
 
-export function validateEnvironmentVariables(): { valid: boolean; missing: string[] } {
+export function validateEnvironmentVariables(): {
+  valid: boolean
+  missing: string[]
+} {
   const requiredVars = [
     'WEAVIATE_HOST',
     'WEAVIATE_API_KEY',
     'GOOGLE_API_KEY',
+    'ANTHROPIC_API_KEY',
   ]
 
   const missing = requiredVars.filter((v) => !process.env[v])
@@ -148,19 +152,16 @@ export async function searchWeaviate(
   }
 
   try {
-    const response = await fetch(
-      `https://${WEAVIATE_HOST}/v1/graphql`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${WEAVIATE_API_KEY}`,
-          'X-Google-Api-Key': GOOGLE_API_KEY,
-          'X-Weaviate-Cluster-Url': WEAVIATE_HOST,
-        },
-        body: JSON.stringify(graphqlQuery),
-      }
-    )
+    const response = await fetch(`https://${WEAVIATE_HOST}/v1/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${WEAVIATE_API_KEY}`,
+        'X-Google-Api-Key': GOOGLE_API_KEY,
+        'X-Weaviate-Cluster-Url': WEAVIATE_HOST,
+      },
+      body: JSON.stringify(graphqlQuery),
+    })
 
     if (!response.ok) {
       throw new Error(`Weaviate API error: ${response.status}`)

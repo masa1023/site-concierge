@@ -18,6 +18,7 @@ export async function GET() {
     WEAVIATE_HOST: process.env.WEAVIATE_HOST ? '✓ Set' : '✗ Missing',
     WEAVIATE_API_KEY: process.env.WEAVIATE_API_KEY ? '✓ Set' : '✗ Missing',
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY ? '✓ Set' : '✗ Missing',
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY ? '✓ Set' : '✗ Missing',
   }
 
   return NextResponse.json(

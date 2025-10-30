@@ -13,8 +13,11 @@ export async function OPTIONS() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { prompt, temperature = 0.7, maxOutputTokens = 1024 } =
-      await request.json()
+    const {
+      prompt,
+      temperature = 0.7,
+      maxOutputTokens = 1024,
+    } = await request.json()
 
     if (!prompt || typeof prompt !== 'string' || prompt.trim() === '') {
       return NextResponse.json(
@@ -23,11 +26,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log(`Generating response for prompt: "${prompt.substring(0, 50)}..."`)
+    console.log(
+      `Generating response for prompt: "${prompt.substring(0, 50)}..."`
+    )
 
     const response = await generateResponse(prompt, {
       temperature,
-      maxOutputTokens,
+      maxTokens: maxOutputTokens,
     })
 
     return NextResponse.json(
