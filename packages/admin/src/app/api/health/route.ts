@@ -1,6 +1,16 @@
 import { NextResponse } from 'next/server'
 import { validateEnvironmentVariables } from '@/lib/weaviate'
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+}
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: CORS_HEADERS })
+}
+
 export async function GET() {
   const { valid, missing } = validateEnvironmentVariables()
 
@@ -10,10 +20,13 @@ export async function GET() {
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY ? '✓ Set' : '✗ Missing',
   }
 
-  return NextResponse.json({
-    status: valid ? 'healthy' : 'degraded',
-    timestamp: new Date().toISOString(),
-    environment,
-    missingVars: missing.length > 0 ? missing : null,
-  })
+  return NextResponse.json(
+    {
+      status: valid ? 'healthy' : 'degraded',
+      timestamp: new Date().toISOString(),
+      environment,
+      missingVars: missing.length > 0 ? missing : null,
+    },
+    { headers: CORS_HEADERS }
+  )
 }

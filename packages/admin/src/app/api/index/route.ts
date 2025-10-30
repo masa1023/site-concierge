@@ -6,6 +6,16 @@ import {
   validateEnvironmentVariables,
 } from '@/lib/weaviate'
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+}
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: CORS_HEADERS })
+}
+
 export async function POST() {
   console.log('Starting indexing process...')
 
@@ -19,7 +29,7 @@ export async function POST() {
         missingVars: missing,
         message: 'Please set all required environment variables before indexing.',
       },
-      { status: 400 }
+      { status: 400, headers: CORS_HEADERS }
     )
   }
 
@@ -39,11 +49,14 @@ export async function POST() {
     // Close the client connection
     await client.close()
 
-    return NextResponse.json({
-      success: true,
-      chunksCount: chunksCount,
-      message: 'Content indexed successfully',
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        chunksCount: chunksCount,
+        message: 'Content indexed successfully',
+      },
+      { headers: CORS_HEADERS }
+    )
   } catch (error: any) {
     console.error('Indexing error:', error)
     return NextResponse.json(
@@ -51,7 +64,7 @@ export async function POST() {
         error: 'Indexing failed',
         message: error?.message || 'Unknown error',
       },
-      { status: 500 }
+      { status: 500, headers: CORS_HEADERS }
     )
   }
 }
