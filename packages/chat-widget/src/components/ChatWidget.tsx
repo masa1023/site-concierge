@@ -1,44 +1,14 @@
-import { useState, useEffect, useRef } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { searchWeaviate, generateResponse } from '../api/client';
 import { ChatButton } from './ChatButton';
 import { ChatWindow } from './ChatWindow';
 import { Message } from '../types';
 import './ChatWidget.css';
 
-interface Config {
-  weaviateHost?: string;
-  weaviateApiKey?: string;
-  googleApiKey?: string;
-  weaviateScheme: string;
-}
-
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [config, setConfig] = useState<Config>({ weaviateScheme: 'https' });
-
-  useEffect(() => {
-    // Get configuration from script tag or global config
-    const getCurrentScript = () => {
-      return (
-        document.currentScript ||
-        document.querySelector('script[src*="chat-widget"]')
-      );
-    };
-
-    const script = getCurrentScript();
-    const newConfig: Config = {
-      weaviateHost: script?.dataset?.weaviateHost || (window as any).CHAT_WIDGET_CONFIG?.weaviateHost,
-      weaviateApiKey: script?.dataset?.weaviateApiKey || (window as any).CHAT_WIDGET_CONFIG?.weaviateApiKey,
-      googleApiKey: script?.dataset?.googleApiKey || (window as any).CHAT_WIDGET_CONFIG?.googleApiKey,
-      weaviateScheme: 'https',
-    };
-    setConfig(newConfig);
-
-    // Set global config for API client
-    (window as any).CHAT_WIDGET_CONFIG = newConfig;
-  }, []);
 
   const toggleChat = () => {
     setIsOpen(!isOpen);

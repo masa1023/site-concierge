@@ -88,7 +88,6 @@ Each package maintains its own environment configuration:
 WEAVIATE_HOST=your-cluster.weaviate.network
 WEAVIATE_API_KEY=your-weaviate-api-key
 GOOGLE_API_KEY=your-google-api-key
-ADMIN_PORT=3001
 ```
 
 **Chat Widget (`packages/chat-widget/.env.local`):**

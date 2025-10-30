@@ -117,3 +117,64 @@ export function validateEnvironmentVariables(): { valid: boolean; missing: strin
     missing,
   }
 }
+
+export interface SearchResult {
+  text: string
+  chunkIndex: number
+}
+
+export async function searchWeaviate(
+  query: string,
+  limit: number = 3,
+  distance: number = 0.7
+): Promise<SearchResult[]> {
+  const graphqlQuery = {
+    query: `
+      {
+        Get {
+          WebsiteContent(
+            nearText: {
+              concepts: ["${query.replace(/"/g, '\\"')}"]
+              distance: ${distance}
+            }
+            limit: ${limit}
+          ) {
+            text
+            chunkIndex
+          }
+        }
+      }
+    `,
+  }
+
+  try {
+    const response = await fetch(
+      `https://${WEAVIATE_HOST}/v1/graphql`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${WEAVIATE_API_KEY}`,
+          'X-Google-Api-Key': GOOGLE_API_KEY,
+          'X-Weaviate-Cluster-Url': WEAVIATE_HOST,
+        },
+        body: JSON.stringify(graphqlQuery),
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error(`Weaviate API error: ${response.status}`)
+    }
+
+    const result = await response.json()
+
+    if (result.errors) {
+      throw new Error(`GraphQL errors: ${JSON.stringify(result.errors)}`)
+    }
+
+    return result.data?.Get?.WebsiteContent || []
+  } catch (error) {
+    console.error('Weaviate search error:', error)
+    throw error
+  }
+}
