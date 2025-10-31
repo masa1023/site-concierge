@@ -1,39 +1,39 @@
-import { useState } from 'preact/hooks';
-import { searchWeaviate, generateResponse } from '../api/client';
-import { ChatButton } from './ChatButton';
-import { ChatWindow } from './ChatWindow';
-import { Message } from '../types';
-import './ChatWidget.css';
+import { useState } from 'preact/hooks'
+import { searchWeaviate, generateResponse } from '../api/client'
+import { ChatButton } from './ChatButton'
+import { ChatWindow } from './ChatWindow'
+import { Message } from '../types'
+import './ChatWidget.css'
 
 export function ChatWidget() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const toggleChat = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
   const closeChat = () => {
-    setIsOpen(false);
-  };
+    setIsOpen(false)
+  }
 
   const handleUserMessage = async (message: string) => {
-    if (isLoading) return;
+    if (isLoading) return
 
-    setIsLoading(true);
+    setIsLoading(true)
 
     // Add user message
-    setMessages(prev => [...prev, { text: message, isUser: true }]);
+    setMessages((prev) => [...prev, { text: message, isUser: true }])
 
     try {
       // Search Weaviate for relevant content
-      const searchResults = await searchWeaviate(message);
+      const searchResults = await searchWeaviate(message)
 
       // Build context from search results
-      let context = '';
+      let context = ''
       if (searchResults && searchResults.length > 0) {
-        context = searchResults.map((item: any) => item.text).join('\n\n');
+        context = searchResults.map((item: any) => item.text).join('\n\n')
       }
 
       // Build prompt for Gemini
@@ -43,23 +43,26 @@ export function ChatWidget() {
 ${context || 'No relevant information found.'}
 
 # User Question
-${message}`;
+${message}`
 
       // Generate response with Gemini
-      const response = await generateResponse(prompt);
+      const response = await generateResponse(prompt)
 
       // Add AI response
-      setMessages(prev => [...prev, { text: response, isUser: false }]);
+      setMessages((prev) => [...prev, { text: response, isUser: false }])
     } catch (error) {
-      console.error('Error generating response:', error);
-      setMessages(prev => [...prev, {
-        text: 'Sorry, something went wrong. Please try again in a moment.',
-        isUser: false
-      }]);
+      console.error('Error generating response:', error)
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: 'Sorry, something went wrong. Please try again in a moment.',
+          isUser: false,
+        },
+      ])
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <>
@@ -72,5 +75,5 @@ ${message}`;
         isLoading={isLoading}
       />
     </>
-  );
+  )
 }
